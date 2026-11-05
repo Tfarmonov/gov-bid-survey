@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How small businesses bid government work</title>
+<meta name="description" content="A 3-minute research survey on how small businesses find and bid government contracts, and where the process breaks down.">
+<style>
+  :root { --bg:#17181b; --panel:#101114; --ink:#f1f1f3; --ink2:#a8a8ad; --ink3:#7c7c82; --line:#2c2d31; --accent:#7fc4b4; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; font-size:15px; line-height:1.55; }
+  .wrap { max-width:640px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { font-size:30px; line-height:1.2; letter-spacing:-0.02em; margin:0 0 8px; }
+  .fact { color:var(--accent); font-size:13px; font-weight:600; margin-bottom:16px; }
+  .intro { color:var(--ink2); margin:0 0 8px; }
+  .hero { width:100%; border-radius:12px; margin:20px 0 4px; display:block; }
+  .cap { color:var(--ink3); font-size:12px; margin:6px 0 20px; }
+  .progress { color:var(--ink2); font-size:12px; letter-spacing:.02em; margin:24px 0 8px; }
+  .q { border-top:1px solid var(--line); padding:22px 0 6px; margin-top:14px; }
+  .q h2 { font-size:17px; font-weight:600; margin:0 0 4px; }
+  .q .hint { color:var(--ink3); font-size:12px; margin:0 0 12px; }
+  .opts { display:flex; flex-wrap:wrap; gap:8px; }
+  .opts button, .chip {
+    font:inherit; font-size:14px; padding:10px 16px; border-radius:999px; min-height:44px; cursor:pointer;
+    border:1px solid var(--line); background:transparent; color:var(--ink);
+  }
+  .opts button:hover, .chip:hover { background:rgba(241,241,243,.06); }
+  .opts button.on, .chip.on { background:var(--accent); border-color:var(--accent); color:#101114; font-weight:600; }
+  textarea, input[type=text], input[type=email] {
+    width:100%; font:inherit; font-size:14px; color:var(--ink); background:var(--panel);
+    border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px;
+  }
+  textarea { min-height:96px; resize:vertical; }
+  textarea:focus, input:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  ::placeholder { color:var(--ink3); }
+  .contact { display:none; margin-top:12px; }
+  .contact.show { display:block; }
+  .submit { margin:28px 0; display:grid; gap:10px; justify-items:start; }
+  .btn { font:inherit; font-size:15px; font-weight:600; padding:12px 22px; border-radius:999px; border:0; cursor:pointer; text-decoration:none; display:inline-block; }
+  .btn-primary { background:var(--ink); color:#17181b; }
+  .btn-primary[disabled] { opacity:.35; cursor:default; }
+  .btn-secondary { background:transparent; border:1px solid var(--line); color:var(--ink); }
+  .fineprint { color:var(--ink3); font-size:12px; }
+  .thanks { display:none; border-top:1px solid var(--line); padding-top:22px; margin-top:14px; }
+  .thanks.show { display:block; }
+  .note { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-top:28px; }
+  .note h3 { margin:0 0 4px; font-size:14px; }
+  .note p { margin:0; color:var(--ink2); font-size:13px; }
+  footer { margin-top:32px; padding-top:18px; border-top:1px solid var(--line); color:var(--ink3); font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>How small businesses bid government work</h1>
+  <div class="fact">About 3 minutes</div>
+  <p class="intro">I am researching how small businesses find and bid government contracts, and where the process breaks down. Eleven quick questions, mostly tap-to-answer. Your answers shape what gets built.</p>
+  <img class="hero" src="hero.png" alt="Illustration of a document under a magnifying glass with radar arcs, in charcoal and gray">
+  <p class="cap">Illustrative artwork. Your individual answers stay private and are used only for this research.</p>
+  <div class="progress" id="progress" role="status">0 of 9 core questions answered</div>
+  <form id="survey" onsubmit="return false;"></form>
+  <div class="submit">
+    <button class="btn btn-primary" id="send" disabled>Answer the questions above to send</button>
+    <div class="fineprint" id="togo"></div>
+  </div>
+  <div class="thanks" id="thanks">
+    <h2 style="margin:0 0 8px;">Thank you</h2>
+    <p class="intro">One last tap: open your email app and your answers are already filled in. No email app on this device? Copy your answers instead and paste them into any email to tfarmonov@gmail.com.</p>
+    <div class="submit">
+      <a class="btn btn-primary" id="mailto" href="#">Open my email app</a>
+      <button class="btn btn-secondary" id="copy">Copy my answers</button>
+    </div>
+  </div>
+  <div class="note">
+    <h3>Why this survey exists</h3>
+    <p>Too many small businesses miss government work they could win. This research tests whether that problem is worth solving properly.</p>
+  </div>
+  <footer>Run by Tem Farmonov, a Raleigh, NC founder. Your answers go only to him. Nothing here is sold, and answering signs you up for nothing.</footer>
+</div>
+<script>
+const EMAIL = 'tfarmonov@gmail.com';
+const SINGLE = [
+  { key:'business_type', q:'What kind of business do you run?', options:['Trades or construction','IT services','Facilities or janitorial','Landscaping or grounds','Staffing','Professional services','Something else'] },
+  { key:'team_size', q:'How many people work there?', options:['1-5','6-20','21-50','51+'] },
+  { key:'bid_history', q:'Have you ever bid on government work?', options:['Yes, regularly','A few times','Looked into it, never bid','Never considered it'] },
+  { key:'portal_count', q:'How many different portals or sites do you check for bids in a typical month?', options:['0','1-2','3-5','6 or more'] },
+  { key:'hours_week', q:'How many hours a week do you (or your team) spend finding and preparing bids?', options:['Under 1','1-3','4-8','More than 8'] },
+  { key:'missed_bids', q:'In the past year, how many bids slipped by because you found them late or never saw them?', options:['None','1-2','3-5','6 or more','No idea'] },
+  { key:'biggest_pain', q:'What is the single biggest headache in government bidding?', options:['Finding bids in the first place','Paperwork and compliance','Writing the proposal','Pricing against bigger firms','Tight deadlines','Beating the incumbent'] },
+  { key:'willingness_pay', q:'If something found the right bids for you and handled the busywork, what would that be worth per month?', options:['Nothing, I would pass','Under $50','$50-150','$150-300','Over $300'] },
+];
+const HEAR = ['Word of mouth','SAM.gov','State or county portals','City or town sites','A paid service (PlanetBids, BidNet, etc.)','I do not look'];
+const answers = {};
+const form = document.getElementById('survey');
+let n = 0;
+function questionBlock(num, text, hint) {
+  const d = document.createElement('div'); d.className = 'q';
+  d.innerHTML = '<h2>' + num + '. ' + text + '</h2>' + (hint ? '<p class="hint">' + hint + '</p>' : '');
+  form.appendChild(d); return d;
+}
+SINGLE.slice(0,3).forEach(s => { n++; buildSingle(n, s); });
+n++;
+const multi = questionBlock(n, 'How do you usually hear about bid opportunities?', 'Pick all that apply.');
+const chipWrap = document.createElement('div'); chipWrap.className = 'opts';
+HEAR.forEach(o => {
+  const b = document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=o;
+  b.onclick = () => {
+    const cur = answers.hear_about || [];
+    answers.hear_about = cur.includes(o) ? cur.filter(v=>v!==o) : [...cur, o];
+    b.classList.toggle('on'); update();
+  };
+  chipWrap.appendChild(b);
+});
+multi.appendChild(chipWrap);
+SINGLE.slice(3).forEach(s => { n++; buildSingle(n, s); });
+n++;
+const story = questionBlock(n, 'What happened the last time a government bid felt like too much work, or fell through?', 'Optional, but these stories are gold.');
+const ta = document.createElement('textarea'); ta.rows = 4; ta.placeholder = 'A sentence or two is plenty.';
+ta.oninput = () => { answers.war_story = ta.value; };
+story.appendChild(ta);
+n++;
+const opt = questionBlock(n, 'Open to a 15-minute call about how you bid today?', 'The best insights come from these.');
+buildSingle(n, { key:'interview_optin', q:'', options:['Yes, reach out','No thanks'] }, opt);
+const contact = document.createElement('div'); contact.className = 'contact'; contact.id = 'contact';
+contact.innerHTML = '<input type="text" id="cname" placeholder="Your name"><input type="email" id="cemail" placeholder="Business email">';
+opt.appendChild(contact);
+document.getElementById('cname').oninput = e => { answers.contact_name = e.target.value; };
+document.getElementById('cemail').oninput = e => { answers.contact_email = e.target.value; };
+function buildSingle(num, s, mount) {
+  const d = mount || questionBlock(num, s.q, 'Choose one');
+  if (mount) { const h = document.createElement('p'); h.className='hint'; h.textContent='Choose one'; d.insertBefore(h, d.children[1]); }
+  const wrap = document.createElement('div'); wrap.className = 'opts';
+  s.options.forEach(o => {
+    const b = document.createElement('button'); b.type='button'; b.textContent=o;
+    b.onclick = () => {
+      answers[s.key] = o;
+      [...wrap.children].forEach(c => c.classList.remove('on'));
+      b.classList.add('on');
+      if (s.key === 'interview_optin') contact.classList.toggle('show', o === 'Yes, reach out');
+      update();
+    };
+    wrap.appendChild(b);
+  });
+  d.appendChild(wrap);
+}
+const CORE = ['business_type','team_size','bid_history','portal_count','hours_week','missed_bids','biggest_pain','willingness_pay'];
+function count() { return CORE.filter(k => answers[k]).length + ((answers.hear_about||[]).length > 0 ? 1 : 0); }
+function update() {
+  const c = count();
+  document.getElementById('progress').textContent = c >= 9 ? 'All set - review and send below.' : c + ' of 9 core questions answered';
+  const btn = document.getElementById('send');
+  btn.disabled = c < 9;
+  btn.textContent = c >= 9 ? 'Send my answers' : 'Answer the questions above to send';
+  document.getElementById('togo').textContent = c >= 9 ? '' : (9 - c) + ' to go. The story question is optional; everything else is one tap.';
+}
+const ORDER = [
+  ['business_type', SINGLE[0].q], ['team_size', SINGLE[1].q], ['bid_history', SINGLE[2].q],
+  ['hear_about', 'How do you usually hear about bid opportunities?'],
+  ['portal_count', SINGLE[3].q], ['hours_week', SINGLE[4].q], ['missed_bids', SINGLE[5].q],
+  ['biggest_pain', SINGLE[6].q], ['willingness_pay', SINGLE[7].q],
+  ['war_story', 'What happened the last time a government bid felt like too much work, or fell through?'],
+];
+function body() {
+  const lines = ORDER.map(([k, q], i) => {
+    const v = k === 'hear_about' ? (answers.hear_about||[]).join(', ') : answers[k];
+    return (i+1) + '. ' + q + '\n' + (v || '-');
+  });
+  lines.push('11. Open to a 15-minute call? ' + (answers.interview_optin === 'Yes, reach out' ? 'Yes' : 'No'));
+  if (answers.interview_optin === 'Yes, reach out') lines.push('Name: ' + (answers.contact_name||'-') + '\nBusiness email: ' + (answers.contact_email||'-'));
+  return lines.join('\n\n');
+}
+document.getElementById('send').onclick = () => {
+  document.getElementById('mailto').href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Survey: government bidding') + '&body=' + encodeURIComponent(body());
+  document.getElementById('thanks').classList.add('show');
+  document.getElementById('thanks').scrollIntoView({ behavior:'smooth' });
+};
+document.getElementById('copy').onclick = async (e) => {
+  try { await navigator.clipboard.writeText(body()); e.target.textContent = 'Copied'; } catch (err) { e.target.textContent = 'Copy failed - select and copy manually'; }
+};
+update();
+</script>
+</body>
+</html>
